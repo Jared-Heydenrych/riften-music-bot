@@ -8,7 +8,7 @@ module.exports = {
 
     run: async ({client, interaction}) => {
 
-        //grabe the queue object
+        //grabs the queue object
         const queue =  client.player.getQueue(interaction.guildId)
 
         //if there is no queue, then reply with following message
@@ -16,7 +16,7 @@ module.exports = {
             return await interaction.editReply("There are no songs in the queue")
         }
 
-        //this will destroy the queue, and will simaltaniously remove the bot from the voice channel.
+        //this will shuffle the queue, and will reply with the following message.
         queue.shuffle()
         await interaction.editReply(`The queue of ${queue.tracks.length} songs have been shuffled!`)
     }
