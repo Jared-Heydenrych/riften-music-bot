@@ -35,5 +35,5 @@ module.exports = {
             .setDescription(`Currently playing [${song.title}](${song.url})\n\n` + bar)
         ],
         })
-    }
+    },
 }

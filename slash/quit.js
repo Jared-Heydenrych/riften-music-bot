@@ -19,5 +19,5 @@ module.exports = {
         //this will destroy the queue, and will simaltaniously remove the bot from the voice channel.
         queue.destroy()
         await interaction.editReply("Bye!")
-    }
+    },
 }

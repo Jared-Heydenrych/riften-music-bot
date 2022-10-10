@@ -48,5 +48,5 @@ module.exports = {
                     .setThumbnail(currentSong.thumbnail)
             ]
         })
-    }
+    },
 }
