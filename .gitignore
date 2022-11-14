@@ -161,6 +161,6 @@ dist
 .ionide
 
 ### Json ###
-/config
+./config/config.json
 
 # End of https://www.toptal.com/developers/gitignore/api/node,visualstudiocode
