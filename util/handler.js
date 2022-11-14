@@ -38,6 +38,7 @@ module.exports = async client => {
                 // global might take up to 1 hr to save.
                 client.application.commands.set(slashCommandsArray);
             }
+
         }
     });
 

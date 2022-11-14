@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 module.exports = async (client, message) => {
     if (message.author.bot || !message.guild) return;
@@ -11,7 +11,7 @@ module.exports = async (client, message) => {
         if (matchedPrefix.includes(client.user.id)) {
             return message.reply({
                 embeds: [
-                    new MessageEmbed().setColor("BLUE")
+                    new EmbedBuilder().setColor("BLUE")
                     .setTitle(`👍 **To see all Commands, type: \`${prefix}help\` / \`/help\`**`)
                 ]
             }).catch(() => null);

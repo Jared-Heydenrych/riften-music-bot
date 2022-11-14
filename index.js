@@ -1,18 +1,17 @@
-const { Client, GatewayIntentBits, Collection, MessageEmbed } = require("discord.js");
+const { Client, GatewayIntentBits, Collection, EmbedBuilder } = require("discord.js");
 const { getVoiceConnection } = require("@discordjs/voice");
 
 const client = new Client(clientSettingsObject());
 
 client.deploySlash = {
-    enabled: false,
-    guild: false, //false | "ID" (if it's false, just set global once, and then never needed again!)
+    enabled: true,
+    guild: "946438195166457866", //false | "ID" (if it's false, just set global once, and then never needed again!)
 }
 
 client.config = require("./config/config.json");
-
 //the collections are maps
 client.commands = new Collection();
-client.slashcommands = new Collection();
+client.slashCommands = new Collection();
 client.queues = new Collection();
 
 require("./util/handler")(client);
