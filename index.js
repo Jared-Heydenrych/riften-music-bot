@@ -15,6 +15,8 @@ client.slashCommands = new Collection();
 client.queues = new Collection();
 
 require("./util/handler")(client);
+require("./util/musicUtils")(client);
+
 
 client.login(client.config.token);
 
