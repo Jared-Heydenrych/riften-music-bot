@@ -19,4 +19,25 @@ module.exports = async (client, oldState, newState) => {
     }
 
     const o = oldState, n = newState;
+    if(stateChange(o.streaming, n.streaming) ||
+        stateChange(o.serverDeaf, n.serverDeaf) ||
+        stateChange(o.serverMute, n.serverMute) ||
+        stateChange(o.selfDeaf, n.selfDeaf) ||
+        stateChange(o.selfMute, n.selfMute) ||
+        stateChange(o.selfVideo, n.selfVideo) ||
+        stateChange(o.suppress, n.suppress) ||
+        stateChange(o.session, n.session)) return;
+    
+    // channel joins
+    if(!o.channelId && n.channelId) {
+        return;
+    }
+
+    // channel leaves
+    if (!n.channelId && o.channelId || n.channelId && o.channelId){
+        const connection = getVoiceConnection(n.guild.id);
+        if(o.channel.members.filter(m => !m.user.bot && !m.voice.selfDeaf && !m.voice.serverDeaf).size >= 1) return;
+        if (connection && connection.joinConfig.channelId == o.channelId) connection.destroy();
+        return;
+    }
 }
