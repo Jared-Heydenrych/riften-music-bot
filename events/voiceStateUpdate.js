@@ -35,9 +35,11 @@ module.exports = async (client, oldState, newState) => {
 
     // channel leaves
     if (!n.channelId && o.channelId || n.channelId && o.channelId){
-        const connection = getVoiceConnection(n.guild.id);
-        if(o.channel.members.filter(m => !m.user.bot && !m.voice.selfDeaf && !m.voice.serverDeaf).size >= 1) return;
-        if (connection && connection.joinConfig.channelId == o.channelId) connection.destroy();
+        setTimeout(() => {
+            const connection = getVoiceConnection(n.guild.id);
+            if(o.channel.members.filter(m => !m.user.bot && !m.voice.selfDeaf && !m.voice.serverDeaf).size >= 1) return;
+            if (connection && connection.joinConfig.channelId == o.channelId) connection.destroy();
+        }, 15_000)
         return;
     }
 }
