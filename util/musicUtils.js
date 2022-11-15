@@ -78,6 +78,26 @@ module.exports = client => {
         })
     }
 
+    client.leaveVoiceChannel = async (channel) => {
+        return new Promise(async (res, rej) => {
+            const oldConnection = getVoiceConnection(channel.guild.id);
+            if(oldConnection) {
+                if(oldConnection.joinConfig.channelId !== channel.id) {
+                    return rej("We aren't in the same channel!");
+                }
+                try {
+                    oldConnection.destroy();
+                    await delay(250);
+                    return res(true);
+                } catch (error) {
+                    return rej(error);
+                }
+            } else {
+                return rej("I'm not connected somewhere!")
+            }
+        })
+    }
+
     function delay(ms) {
         return new Promise((res) => setTimeout(() => res(2), ms));
     }
