@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const dcYtdl =  require("discord-ytdl-core");
-const { joinVoiceChannel, getVoiceConnection, VoiceConnectionStatus, createAudioResource, createAudioPlayer, NoSubscriberBehavior } =  require("@discordjs/voice");
+const { joinVoiceChannel, getVoiceConnection, VoiceConnectionStatus, createAudioResource, createAudioPlayer, NoSubscriberBehavior, entersState } =  require("@discordjs/voice");
 const { default: YouTube} = require("youtube-sr");
 
 module.exports = client => {
@@ -47,11 +47,38 @@ module.exports = client => {
     }
 
     client.joinVoiceChannel = async (channel) => {
-        return new Promise((res, rej) => {
+        return new Promise(async (res, rej) => {
             const oldConnection = getVoiceConnection(channel.guild.id);
-            if (oldConnection) {
-                return rej(`I am already connected in: <#${oldConnection.joinConfig.channelId}>`)
-            }
+            if (oldConnection) return rej(`I am already connected in: <#${oldConnection.joinConfig.channelId}>`);
+            //this creates the new connection
+            const newConnection = joinVoiceChannel({
+                channelId: channel.id,
+                guildId: channel.guild.id,
+                adapterCreator: channel.guild.voiceAdapterCreator
+            });
+            await delay(250);
+            newConnection.on(VoiceConnectionStatus.Disconnected, async (oldState, newState) => {
+                try {
+                    //this will check if it is either connecting or signalling for 5 seconds.
+                    await Promise.race([
+                        entersState(newConnection, VoiceConnectionStatus.Signalling, 5_000),
+                        entersState(newConnection, VoiceConnectionStatus.Connecting, 5_000),
+                    ]);
+                } catch (error) {
+                    newConnection.destroy(); // Left the voice channel.
+                }
+            })
+
+            newConnection.on(VoiceConnectionStatus.Destroyed, () => {
+                //delet queue
+                client.queues.delete(channel.guild.id);
+            })
+
+            return res("Connected to voice channel")
         })
+    }
+
+    function delay(ms) {
+        return new Promise((res) => setTimeout(() => res(2), ms));
     }
 }
